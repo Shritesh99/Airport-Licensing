@@ -12,6 +12,34 @@
  * limitations under the License.
  */
 
+/******************* DGCA rules *************************************************************/
+
+rule DGCAApproval {
+    description: "DGCA is responsible for approval."
+    participant: "org.example.airportlicensing.DGCA"
+    operation: ALL
+    resource: "org.example.airportlicensing.License"
+    action: ALLOW
+}
+
+rule DGCAandRO {
+    description: "DGCA can create RO"
+    participant: "org.example.airportlicensing.DGCA"
+    operation: ALL
+    resource: "org.example.airportlicensing.RO"
+    action: ALLOW
+}
+
+/******************* Koi bhi b*r nahi kar sakta ************************************************/
+rule AccessDenied {
+    description: "Access Denied"
+    participant: "org.example.airportlicensing.*"
+    operation: ALL
+    resource: "**"
+    action: DENY
+}
+
+/******************* Network admin sbka baap h **************************************************/
 rule NetworkAdminUser {
     description: "Grant business network administrators full access to user resources"
     participant: "org.hyperledger.composer.system.NetworkAdmin"

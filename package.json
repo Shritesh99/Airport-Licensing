@@ -3,7 +3,7 @@
     "composer": "^0.20.9"
   },
   "name": "airport-licensing",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Airport Licensing Bussiness Network",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/airport-licensing.bna",
@@ -32,5 +32,9 @@
     "nyc": "latest",
     "mkdirp": "latest",
     "mocha": "latest"
+  },
+  "dependencies": {
+    "passport-google-oauth2": "^0.2.0",
+    "passport-local": "^1.0.0"
   }
 }

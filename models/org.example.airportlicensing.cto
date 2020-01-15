@@ -17,3 +17,144 @@
  */
 
 namespace org.example.airportlicensing
+
+/******** Concepts ********************************/
+
+concept Address{
+  o String line1
+  o String line
+  o String city
+  o String state
+  o String country
+  o Integer postalcode
+}
+
+concept PersonWithoutIdentity{
+  o String firstName
+  o String lastName
+  o String phoneNumber
+  o String email
+  o Address address optional
+}
+
+concept Aerodrome{
+  o String id
+  o String placeName
+  o String situation
+  o String grid
+  o Integer elevationMeter
+  o Integer elevationFeet
+  o Integer orentationMeter
+  o Integer orentationFeet
+  o Address address
+  o PersonWithoutIdentity owner
+}
+
+concept ControlAerodrome{
+  o Boolean owner
+  o String rightsIfNotOver
+  o DateTime startingPeriod
+  o DateTime endingPeriod
+  o DateTime termination
+}
+
+concept PermissionsAndApprovals{
+  o DateTime dateApprovalOfMinistryOfDefense
+  o DateTime dateApprovalOfMinistryOfHomeAffairs
+  o DateTime dateApprovalOfOwnerOfLand
+  o DateTime dateApprovalOfLocalAuthority
+}
+
+
+concept AerodromeActivities{
+  o String categoryState
+  o String purposeOfPrivate
+  o Boolean onlyYourAircratf
+  o Boolean priorPermissionForOtherAircraft
+  o Boolean allWeatherRequired
+  o String detailsOfProposedLighting
+  o String detailsCNS_ATN
+  o String detailsMET_Facilities
+  o String otherAviationActivies
+  o String heaviestAircraftType
+  o Integer heaviestAircraftWeight
+  o Integer heaviestAircraftLength
+  o Integer heaviestAircraftWidth
+}
+
+concept AerodromeManual{
+  o Boolean manualEnclosed
+  o String dateToBeSubmitted
+}
+
+concept FeeDetails{
+  o String challanNo
+  o Integer amount
+  o DateTime dateOfFeeDeposit
+  o String nameOfDraweeBank
+  --> Operator operator
+}
+
+/******** Participants ****************************/
+
+abstract participant Person identified by email {
+  o String email
+  o String firstName
+  o String lastName
+  o String phoneNumber
+  o String designation optional
+  o String nationality optional
+  o Address address optional
+}
+
+participant DGCA extends Person{
+  o String signImage
+}
+
+participant ROH extends Person{
+  o String signImage
+  o RO office
+}
+
+participant ACI extends Person{
+  o String signImage
+  o RO office
+}
+
+participant Operator extends Person{
+  o String signImage
+  o License[] lisences optional
+}
+
+/******** Eneums *************************/
+
+enum LicenseStatus{
+  o Approved
+  o Rejected
+  o Processing
+}
+
+
+
+/******** Asset Non-Transferable *************************/
+
+asset RO identified by id{
+  o String id
+  o Address address
+  --> ROH head
+  --> ACI[] ACLs
+}
+
+/******** Asset Transferable *************************/
+
+asset License identified by id {
+  o String id
+  o LicenseStatus status
+  o Aerodrome aerodrome optional
+  o AerodromeActivities aerodromeActivities optional
+  o ControlAerodrome controlAerodrome optional
+  o PermissionsAndApprovals approvals optional
+  o AerodromeManual manual optional
+  o FeeDetails feeDetails optional
+  --> Operator operator
+}
