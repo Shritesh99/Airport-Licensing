@@ -12,6 +12,74 @@
  * limitations under the License.
  */
 
+/******************* Opreator rules *************************************************************/
+
+rule OperatorApplyLicense {
+    description: "Opreator can apply for License"
+    participant: "org.example.airportlicensing.Operator"
+    operation: ALL
+    resource: "org.example.airportlicensing.License"
+    action: ALLOW
+}
+rule OperatorGETRo {
+    description: "Opreator can get region"
+    participant: "org.example.airportlicensing.Operator"
+    operation: READ
+    resource: "org.example.airportlicensing.RO"
+    action: ALLOW
+}
+rule OperatorUpdate {
+    description: "Opreator Update"
+    participant: "org.example.airportlicensing.Operator"
+    operation: UPDATE
+    resource: "org.example.airportlicensing.Operator"
+    action: ALLOW
+}
+
+ /******************* ACI rules *************************************************************/
+
+rule ACIInpection {
+    description: "ACI inspection"
+    participant: "org.example.airportlicensing.ACI"
+    operation: READ, UPDATE
+    resource: "org.example.airportlicensing.License"
+    action: ALLOW
+}
+
+rule ACIUpdate {
+    description: "ACI update"
+    participant: "org.example.airportlicensing.ACI"
+    operation: UPDATE
+    resource: "org.example.airportlicensing.ACI"
+    action: ALLOW
+}
+
+/******************* ROH rules *************************************************************/
+
+rule ROACICreation {
+    description: "ROH ACI creation"
+    participant: "org.example.airportlicensing.ROH"
+    operation: ALL
+    resource: "org.example.airportlicensing.ACI"
+    action: ALLOW
+}
+
+rule ROHandRO {
+    description: "ROH and RO"
+    participant: "org.example.airportlicensing.ROH"
+    operation: UPDATE
+    resource: "org.example.airportlicensing.RO"
+    action: ALLOW
+}
+
+rule ROHpdate {
+    description: "ROH update"
+    participant: "org.example.airportlicensing.ROH"
+    operation: UPDATE
+    resource: "org.example.airportlicensing.ROH"
+    action: ALLOW
+}
+
 /******************* DGCA rules *************************************************************/
 
 rule DGCAApproval {
@@ -22,6 +90,14 @@ rule DGCAApproval {
     action: ALLOW
 }
 
+rule DGCAACICreation {
+    description: "DGCA ACI creation"
+    participant: "org.example.airportlicensing.DGCA"
+    operation: ALL
+    resource: "org.example.airportlicensing.ACI"
+    action: ALLOW
+}
+
 rule DGCAandRO {
     description: "DGCA can create RO"
     participant: "org.example.airportlicensing.DGCA"
@@ -29,14 +105,12 @@ rule DGCAandRO {
     resource: "org.example.airportlicensing.RO"
     action: ALLOW
 }
-
-/******************* Koi bhi b*r nahi kar sakta ************************************************/
-rule AccessDenied {
-    description: "Access Denied"
-    participant: "org.example.airportlicensing.*"
-    operation: ALL
-    resource: "**"
-    action: DENY
+rule DGCUpdate {
+    description: "DGCA Update"
+    participant: "org.example.airportlicensing.DGCA"
+    operation: UPDATE
+    resource: "org.example.airportlicensing.DGCA"
+    action: ALLOW
 }
 
 /******************* Network admin sbka baap h **************************************************/
@@ -54,4 +128,13 @@ rule NetworkAdminSystem {
     operation: ALL
     resource: "org.hyperledger.composer.system.**"
     action: ALLOW
+}
+
+/******************* Koi bhi b*r nahi kar sakta ************************************************/
+rule AccessDenied {
+    description: "Access Denied"
+    participant: "org.example.airportlicensing.*"
+    operation: ALL
+    resource: "**"
+    action: DENY
 }

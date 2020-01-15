@@ -34,6 +34,7 @@ concept PersonWithoutIdentity{
   o String lastName
   o String phoneNumber
   o String email
+  o String designation optional
   o Address address optional
 }
 
@@ -49,22 +50,6 @@ concept Aerodrome{
   o Address address
   o PersonWithoutIdentity owner
 }
-
-concept ControlAerodrome{
-  o Boolean owner
-  o String rightsIfNotOver
-  o DateTime startingPeriod
-  o DateTime endingPeriod
-  o DateTime termination
-}
-
-concept PermissionsAndApprovals{
-  o DateTime dateApprovalOfMinistryOfDefense
-  o DateTime dateApprovalOfMinistryOfHomeAffairs
-  o DateTime dateApprovalOfOwnerOfLand
-  o DateTime dateApprovalOfLocalAuthority
-}
-
 
 concept AerodromeActivities{
   o String categoryState
@@ -82,9 +67,40 @@ concept AerodromeActivities{
   o Integer heaviestAircraftWidth
 }
 
+concept ControlAerodrome{
+  o Boolean owner
+  o String rightsIfNotOver
+  o DateTime startingPeriod
+  o DateTime endingPeriod
+  o DateTime termination
+}
+
+concept PermissionsAndApprovals{
+  o String Defencefile
+  o DateTime dateApprovalOfMinistryOfDefense
+  o String HomeAffairsfile
+  o DateTime dateApprovalOfMinistryOfHomeAffairs
+  o String Ownerfile
+  o DateTime dateApprovalOfOwnerOfLand
+  o String Localfile
+  o DateTime dateApprovalOfLocalAuthority
+}
+
+concept AerodromeManagementPersonnel{
+  o PersonWithoutIdentity managingDirector
+  o PersonWithoutIdentity dayToDayIncharge
+  o PersonWithoutIdentity areodromeSaftey
+  o PersonWithoutIdentity providerCNSATM
+  o PersonWithoutIdentity providerMET
+  o PersonWithoutIdentity dayToDayATM
+  o PersonWithoutIdentity dayToDayCNS
+  o PersonWithoutIdentity dayToDayRFF
+  o PersonWithoutIdentity dayToDayMET
+}
+
 concept AerodromeManual{
   o Boolean manualEnclosed
-  o String dateToBeSubmitted
+  o String dateToBeSubmitted optional
 }
 
 concept FeeDetails{
@@ -132,6 +148,8 @@ enum LicenseStatus{
   o Approved
   o Rejected
   o Processing
+  o Approved_for_onsite_inspection
+  o Not_Approved_for_onsite_inspection
 }
 
 
@@ -149,12 +167,16 @@ asset RO identified by id{
 
 asset License identified by id {
   o String id
+  o DateTime date optional
   o LicenseStatus status
   o Aerodrome aerodrome optional
   o AerodromeActivities aerodromeActivities optional
   o ControlAerodrome controlAerodrome optional
   o PermissionsAndApprovals approvals optional
+  o AerodromeManagementPersonnel mangement optional
   o AerodromeManual manual optional
   o FeeDetails feeDetails optional
   --> Operator operator
+  --> ACI inspector optional
+  o RO office optional
 }

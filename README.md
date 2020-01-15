@@ -8,7 +8,7 @@ airportlicensing
 org.example.airportlicensing
 ```
 
-## Deploying Network
+## Deploying a network
 
 ```
 cd ~/fabric-dev-servers
@@ -31,11 +31,44 @@ composer archive create -t dir -n .
 
 composer network install -a airport-licensing@<v>.bna -c PeerAdmin@hlfv1
 
-composer network upgrade -c PeerAdmin@hlfv1 -n airport-licensing -V 0.0.2
+composer network start --networkName airport-licensing --networkVersion <v> --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
 
 composer card import --file networkadmin.card
 
 composer network ping --card admin@airport-licensing
+
+```
+
+## Upgrading a Deployed Network
+
+```
+cd ~/fabric-dev-servers
+
+export FABRIC_VERSION=hlfv12
+
+./startFabric.sh
+
+nvm use 8
+
+composer-playground
+```
+
+package.json network version
+
+```
+nvm use 8
+
+cd ~/WebProjects/airport-licensing
+
+composer archive create -t dir -n .
+
+composer network install -a airport-licensing@<v>.bna -c PeerAdmin@hlfv1
+
+composer network upgrade -c PeerAdmin@hlfv1 -n airport-licensing -v <v>
+
+composer card import --file networkadmin.card
+
+composer network ping --card restadmin@airport-licensing
 
 ```
 
@@ -64,19 +97,9 @@ composer network ping -c restadmin@airport-licensing
 
 sed -e 's/localhost:7051/peer0.org1.example.com:7051/' -e 's/localhost:7053/peer0.org1.example.com:7053/' -e 's/localhost:7054/ca.org1.example.com:7054/' -e 's/localhost:7050/orderer.example.com:7050/' < $HOME/.composer/cards/admin@airport-licensing/connection.json  > /tmp/connection.json && cp -p /tmp/connection.json $HOME/.composer/cards/admin@airport-licensing/
 
-docker run \
--d \
--e COMPOSER_CARD=${COMPOSER_CARD} \
--e COMPOSER_NAMESPACES=${COMPOSER_NAMESPACES} \
--e COMPOSER_AUTHENTICATION=${COMPOSER_AUTHENTICATION} \
--e COMPOSER_MULTIUSER=${COMPOSER_MULTIUSER} \
--e COMPOSER_PROVIDERS="${COMPOSER_PROVIDERS}" \
--e COMPOSER_DATASOURCES="${COMPOSER_DATASOURCES}" \
--v ~/.composer:/home/composer/.composer \
---name rest \
---network composer_default \
--p 3000:3000 \
-myorg/composer-rest-server
+cd rest-server && docker-compose up
+
+cd ..
 
 composer card export -c admin@airport-licensing -f restadmin-plus-cert.card
 ```
@@ -89,4 +112,21 @@ composer identity issue -c admin@airport-licensing -f <name>.card -u email -a "r
 composer card import --file networkadmin.card
 
 composer card export -c admin@airport-licensing -f <name>-plus-cert.card
+```
+
+## Stoping Server
+
+```
+cd ~/fabric-dev-servers
+
+./stopFabric.sh
+
+```
+
+## Docker Stop
+
+```
+docker kill $(docker ps -q)
+docker rm $(docker ps -aq)
+docker rmi $(docker images dev-* -q)
 ```

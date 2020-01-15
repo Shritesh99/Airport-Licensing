@@ -1,0 +1,23 @@
+version: "3.3"
+services:
+  composer-rest-server:
+    ports:
+      - "80:80"
+      - "3000:3000"
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "~/.composer:/home/composer/.composer"
+    restart: always
+    logging:
+      options:
+        max-size: 1g
+    environment:
+      - "COMPOSER_CARD=${COMPOSER_CARD}"
+      - "COMPOSER_NAMESPACES=${COMPOSER_NAMESPACES}"
+      - "COMPOSER_AUTHENTICATION=${COMPOSER_AUTHENTICATION}"
+      - "COMPOSER_MULTIUSER=${COMPOSER_MULTIUSER}"
+      - "COMPOSER_PROVIDERS=${COMPOSER_PROVIDERS}"
+      - "COMPOSER_DATASOURCES=${COMPOSER_DATASOURCES}"
+    container_name: rest
+    network_mode: composer_default
+    image: myorg/composer-rest-server
