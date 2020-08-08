@@ -2,6 +2,7 @@
 
 Airport Licensing Bussiness Network
 
+Built on Hyperledger Composer.
 ```
 airportlicensing
 
@@ -129,4 +130,8 @@ cd ~/fabric-dev-servers
 docker kill $(docker ps -q)
 docker rm $(docker ps -aq)
 docker rmi $(docker images dev-* -q)
+```
+### License
+```
+MIT
 ```
